@@ -1,0 +1,53 @@
+<div class="builder rpg" ng-mouseup="selectedBlocks.first=false">
+
+    <action-bar title="Map editor" genre="rpg"></action-bar>
+    <div class="tool-bar">
+        <div class='play fa fa-play' ng-click="play()"></div>
+        <div class="input-group">
+            <h3>Size</h3>
+            <label>Width ({{mapSize.width}} blocks)</label><input type="range" ng-model="mapSize.width" min="10" max="100" placeholder="Width in blocks">
+            <label>Height ({{mapSize.height}} blocks)</label><input type="range" ng-model="mapSize.height" min="10" max="100" placeholder="Height in blocks">
+        </div>
+        
+        <h3>Tileset</h3>
+        <div class="tileset" style="background-image:url('{{tileset.getSRC()}}')">
+            <div 
+                 class="block" 
+                 ng-repeat="block in blocks" 
+                 ng-mousedown="blockSelection($event, block)" 
+                 ng-mouseover="overBlock(block)" 
+                 ng-mouseleave="leaveBlock(block)" 
+                 ng-class="{'over': block.over, 'selected': block.selected}"
+            >
+                <div class='wall' ng-show="settingWalls" ng-class="block.wall ? 'fa fa-circle-o' : 'fa fa-times'"></div>
+            </div>
+        </div>
+        <button type="button" ng-click="paintAll()">Fill layer</button>
+        <button type="button" ng-click="erase()">Erase layer</button>
+        <button type="button" class="set-wall" ng-click="settingWalls=!settingWalls" ng-class="{'active' : settingWalls}">Set/unset walls</button>
+        
+        <h3>Layers</h3>
+        <div class="layer-buttons">
+            <input type="radio" id="layer-1" ng-model="layer" value="0" ng-change="updateLayer(layer)"/>
+            <label for="layer-1" class="radio-label first">1</label>
+            <input type="radio" id="layer-2" ng-model="layer" value="1" ng-change="updateLayer(layer)"/>
+            <label for="layer-2" class="radio-label">2</label>
+            <input type="radio" id="layer-3" ng-model="layer" value="2" ng-change="updateLayer(layer)"/>
+            <label for="layer-3" class="radio-label last">3</label>
+        </div>
+        
+    </div>
+    <div class="map-container">
+        <div class='ruler-container' style="width: {{gameSize.width}}px; height:{{gameSize.height}}px">
+            <div class='ruler' style="width: {{gameSize.width}}px; height:{{gameSize.height}}px"></div>
+        </div>
+        <game-viewer 
+            tileset="tileset"
+            map="map"
+            char="char"
+            pnjs="pnjs"
+            mode="editor"
+            selected-blocks="lastSelectedBlocks"
+        ></game-viewer>
+    </div>
+</div>
